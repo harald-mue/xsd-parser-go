@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/prefix"
+           targetNamespace="http://example.com/prefix"
+           elementFormDefault="qualified">
+  <xs:complexType name="RootType">
+    <xs:sequence>
+      <xs:element name="Child" type="xs:string"/>
+      <xs:element name="Item" type="xs:int" minOccurs="0" maxOccurs="2"/>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:element name="Root" type="tns:RootType"/>
+</xs:schema>

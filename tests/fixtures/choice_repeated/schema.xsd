@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com"
+           targetNamespace="http://example.com"
+           elementFormDefault="qualified">
+  <xs:complexType name="LogType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Text" type="xs:string"/>
+      <xs:element name="Code" type="xs:int"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:element name="Log" type="tns:LogType"/>
+</xs:schema>

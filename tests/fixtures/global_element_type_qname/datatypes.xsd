@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="urn:legacy:datatypes"
+           targetNamespace="urn:legacy:datatypes"
+           elementFormDefault="qualified">
+
+  <xs:simpleType name="Guid">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-fA-F-]{36}"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

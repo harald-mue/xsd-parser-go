@@ -1,0 +1,4 @@
+<tns:Payload xmlns:tns="http://example.com">
+  <tns:Data attr="v"><Nested>text</Nested></tns:Data>
+  <tns:Text>anything</tns:Text>
+</tns:Payload>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/attribute-group"
+           targetNamespace="http://example.com/attribute-group"
+           elementFormDefault="qualified">
+  <xs:attributeGroup name="CommonAttrs">
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="lang" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="ExtendedAttrs">
+    <xs:attributeGroup ref="tns:CommonAttrs"/>
+    <xs:attribute name="version" type="xs:int"/>
+  </xs:attributeGroup>
+  <xs:complexType name="ItemType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="tns:ExtendedAttrs"/>
+  </xs:complexType>
+  <xs:element name="Item" type="tns:ItemType"/>
+</xs:schema>

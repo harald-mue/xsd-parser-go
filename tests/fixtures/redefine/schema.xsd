@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/redefine"
+           targetNamespace="http://example.com/redefine"
+           elementFormDefault="qualified">
+  <xs:redefine schemaLocation="base.xsd">
+    <xs:simpleType name="Code">
+      <xs:restriction base="tns:Code">
+        <xs:maxLength value="5"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:redefine>
+  <xs:element name="CodeValue" type="tns:Code"/>
+</xs:schema>

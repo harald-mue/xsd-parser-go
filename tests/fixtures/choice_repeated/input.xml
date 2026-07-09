@@ -1,0 +1,5 @@
+<tns:Log xmlns:tns="http://example.com">
+  <tns:Text>first</tns:Text>
+  <tns:Code>7</tns:Code>
+  <tns:Text>last</tns:Text>
+</tns:Log>

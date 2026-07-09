@@ -1,0 +1,5 @@
+<tns:Container xmlns:tns="http://example.com" KnownAttr="x">
+  <tns:Name>example</tns:Name>
+  <tns:Known>ok</tns:Known>
+  <tns:Extension>more</tns:Extension>
+</tns:Container>

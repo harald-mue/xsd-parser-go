@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/abstract-empty-base"
+           targetNamespace="http://example.com/abstract-empty-base"
+           elementFormDefault="qualified">
+  <xs:element name="StatusType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DeploymentIdentifier" type="tns:DeploymentIdentifierBase"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="DeploymentIdentifierBase" abstract="true"/>
+
+  <xs:complexType name="DeploymentIdIdentifier">
+    <xs:complexContent>
+      <xs:extension base="tns:DeploymentIdentifierBase">
+        <xs:sequence>
+          <xs:element name="DeploymentId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ArtifactIdentifier">
+    <xs:complexContent>
+      <xs:extension base="tns:DeploymentIdentifierBase">
+        <xs:sequence>
+          <xs:element name="ArtifactName" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

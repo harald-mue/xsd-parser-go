@@ -1,0 +1,3 @@
+<tns:Item xmlns:tns="http://example.com/attribute-group" id="a" lang="en" version="1">
+  <tns:Name>Example</tns:Name>
+</tns:Item>

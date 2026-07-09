@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:base="http://example.com/base"
+           targetNamespace="http://example.com/base"
+           elementFormDefault="qualified">
+  <xs:complexType name="BaseType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com"
+           targetNamespace="http://example.com"
+           elementFormDefault="qualified">
+  <xs:complexType name="StrictType">
+    <xs:sequence>
+      <xs:element name="Item" type="xs:string" minOccurs="1" maxOccurs="2"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ChoiceType">
+    <xs:choice>
+      <xs:element name="A" type="xs:string"/>
+      <xs:element name="B" type="xs:int"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:element name="Strict" type="tns:StrictType"/>
+  <xs:element name="Choice" type="tns:ChoiceType"/>
+</xs:schema>

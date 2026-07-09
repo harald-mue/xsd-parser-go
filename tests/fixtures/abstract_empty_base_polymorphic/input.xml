@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StatusType xmlns="http://example.com/abstract-empty-base"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:tns="http://example.com/abstract-empty-base">
+  <DeploymentIdentifier xsi:type="tns:DeploymentIdIdentifier">
+    <DeploymentId>deployment-123</DeploymentId>
+  </DeploymentIdentifier>
+</StatusType>

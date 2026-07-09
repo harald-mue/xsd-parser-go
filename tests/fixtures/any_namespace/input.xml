@@ -1,0 +1,4 @@
+<tns:AnyNamespace xmlns:tns="http://example.com/base" xmlns:ext="http://example.com/ext" ext:code="x">
+  <ext:item>ok</ext:item>
+  <local>ok</local>
+</tns:AnyNamespace>

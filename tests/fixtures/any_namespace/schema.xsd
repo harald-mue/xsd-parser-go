@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/base"
+           targetNamespace="http://example.com/base"
+           elementFormDefault="qualified">
+  <xs:complexType name="AnyNamespaceType">
+    <xs:sequence>
+      <xs:any namespace="##other" minOccurs="1" maxOccurs="2" processContents="lax"/>
+      <xs:any namespace="##local http://example.com/ext" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="skip"/>
+  </xs:complexType>
+  <xs:element name="AnyNamespace" type="tns:AnyNamespaceType"/>
+</xs:schema>

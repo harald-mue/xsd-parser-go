@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com"
+           targetNamespace="http://example.com"
+           elementFormDefault="qualified">
+  <xs:simpleType name="CodeType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="2"/>
+      <xs:maxLength value="5"/>
+      <xs:pattern value="^[A-Z]+$"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SizeType">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ColorType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="red"/>
+      <xs:enumeration value="green"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="ItemType">
+    <xs:sequence>
+      <xs:element name="Code" type="tns:CodeType"/>
+      <xs:element name="Size" type="tns:SizeType"/>
+      <xs:element name="Color" type="tns:ColorType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Item" type="tns:ItemType"/>
+</xs:schema>

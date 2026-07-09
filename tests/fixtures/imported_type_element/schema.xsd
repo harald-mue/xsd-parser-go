@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="urn:legacy:monitor"
+           xmlns:data="urn:legacy:data"
+           targetNamespace="urn:legacy:monitor"
+           elementFormDefault="qualified">
+
+  <xs:import namespace="urn:legacy:data" schemaLocation="data.xsd"/>
+
+  <!-- ap-dcm-device-monitor-control-stub: top-level monitor element typed with imported data complex type -->
+  <xs:element name="NotifyIncidentAppeared" type="data:Incident"/>
+</xs:schema>

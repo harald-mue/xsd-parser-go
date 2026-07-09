@@ -1,0 +1,4 @@
+<tns:RequiredScalar xmlns:tns="http://example.com/presence" code="A">
+  <tns:Name></tns:Name>
+  <tns:Count>0</tns:Count>
+</tns:RequiredScalar>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:base="http://example.com/base"
+           xmlns:impl="http://example.com/impl"
+           targetNamespace="http://example.com/impl"
+           elementFormDefault="qualified">
+  <xs:import namespace="http://example.com/base" schemaLocation="base.xsd"/>
+  <xs:element name="dog" type="impl:DogType" substitutionGroup="base:animal"/>
+  <xs:complexType name="DogType">
+    <xs:complexContent>
+      <xs:extension base="base:AnimalType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

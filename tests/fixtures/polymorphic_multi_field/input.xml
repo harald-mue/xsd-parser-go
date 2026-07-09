@@ -1,0 +1,4 @@
+<container xmlns="http://example.com">
+  <dog id="1" name="Rex" />
+  <car vin="VIN123" brand="ACME" />
+</container>

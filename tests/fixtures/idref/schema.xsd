@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/idref"
+           targetNamespace="http://example.com/idref"
+           elementFormDefault="qualified">
+  <xs:complexType name="NodeType">
+    <xs:sequence>
+      <xs:element name="Ref" type="xs:IDREF" minOccurs="0"/>
+      <xs:element name="Refs" type="xs:IDREFS" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+  </xs:complexType>
+  <xs:element name="Node" type="tns:NodeType"/>
+</xs:schema>

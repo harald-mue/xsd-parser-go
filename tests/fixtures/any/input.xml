@@ -1,0 +1,5 @@
+<tns:Foo xmlns:tns="http://example.com" extra="value">
+  <tns:Name>abc</tns:Name>
+  <Other attr="x"><Nested>text</Nested></Other>
+  <Another />
+</tns:Foo>

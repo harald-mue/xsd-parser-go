@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com"
+           targetNamespace="http://example.com"
+           elementFormDefault="qualified">
+  <xs:complexType name="First">
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Second">
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+  <xs:element name="Item" type="tns:Second"/>
+</xs:schema>

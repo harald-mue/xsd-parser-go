@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://example.com"
+        targetNamespace="http://example.com">
+
+  <element name="container">
+    <complexType>
+      <sequence>
+        <element ref="tns:animal" />
+        <element ref="tns:vehicle" />
+      </sequence>
+    </complexType>
+  </element>
+
+  <element name="animal" type="tns:animal" abstract="true" />
+  <element name="dog" type="tns:dog" substitutionGroup="tns:animal" />
+
+  <complexType name="animal">
+    <attribute name="id" type="xs:int" use="required" />
+  </complexType>
+
+  <complexType name="dog">
+    <complexContent>
+      <extension base="tns:animal">
+        <attribute name="name" type="xs:string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="vehicle" type="tns:vehicle" abstract="true" />
+  <element name="car" type="tns:car" substitutionGroup="tns:vehicle" />
+
+  <complexType name="vehicle">
+    <attribute name="vin" type="xs:string" use="required" />
+  </complexType>
+
+  <complexType name="car">
+    <complexContent>
+      <extension base="tns:vehicle">
+        <attribute name="brand" type="xs:string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+</schema>

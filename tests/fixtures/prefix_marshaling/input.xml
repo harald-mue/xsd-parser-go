@@ -1,0 +1,4 @@
+<tns:Root xmlns:tns="http://example.com/prefix" code="x">
+  <tns:Child>hello</tns:Child>
+  <tns:Item>1</tns:Item>
+</tns:Root>

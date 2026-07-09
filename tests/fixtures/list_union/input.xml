@@ -1,0 +1,5 @@
+<tns:Item xmlns:tns="http://example.com">
+  <tns:Tags>alpha beta gamma</tns:Tags>
+  <tns:Numbers>1 2 3</tns:Numbers>
+  <tns:CodeOrText>A</tns:CodeOrText>
+</tns:Item>

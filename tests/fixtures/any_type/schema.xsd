@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com"
+           targetNamespace="http://example.com"
+           elementFormDefault="qualified">
+  <xs:complexType name="PayloadType">
+    <xs:sequence>
+      <xs:element name="Data" type="xs:anyType"/>
+      <xs:element name="Text" type="xs:anySimpleType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Payload" type="tns:PayloadType"/>
+</xs:schema>

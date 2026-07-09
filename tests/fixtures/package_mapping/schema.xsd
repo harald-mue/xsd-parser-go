@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/root"
+           xmlns:base="http://example.com/base"
+           targetNamespace="http://example.com/root"
+           elementFormDefault="qualified">
+  <xs:import namespace="http://example.com/base" schemaLocation="base.xsd"/>
+  <xs:complexType name="RootType">
+    <xs:sequence>
+      <xs:element name="Base" type="base:BaseType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Root" type="tns:RootType"/>
+</xs:schema>

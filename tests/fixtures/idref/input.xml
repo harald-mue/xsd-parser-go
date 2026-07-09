@@ -1,0 +1,4 @@
+<tns:Node xmlns:tns="http://example.com/idref" id="n1">
+  <tns:Ref>n2</tns:Ref>
+  <tns:Refs>n2 n3</tns:Refs>
+</tns:Node>

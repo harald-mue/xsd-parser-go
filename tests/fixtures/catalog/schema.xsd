@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:base="http://example.com/catalog/base"
+           xmlns:tns="http://example.com/catalog"
+           targetNamespace="http://example.com/catalog"
+           elementFormDefault="qualified">
+  <xs:import namespace="http://example.com/catalog/base" schemaLocation="urn:catalog:base.xsd"/>
+  <xs:element name="Code" type="base:ExternalCode"/>
+</xs:schema>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/facets"
+           targetNamespace="http://example.com/facets"
+           elementFormDefault="qualified">
+  <xs:simpleType name="CollapsedCode">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AmountType">
+    <xs:restriction base="xs:decimal">
+      <xs:totalDigits value="5"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="FacetHolderType">
+    <xs:sequence>
+      <xs:element name="Code" type="tns:CollapsedCode"/>
+      <xs:element name="Amount" type="tns:AmountType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FacetHolder" type="tns:FacetHolderType"/>
+</xs:schema>

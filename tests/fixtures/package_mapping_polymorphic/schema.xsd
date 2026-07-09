@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:root="http://example.com/root"
+           xmlns:base="http://example.com/base"
+           targetNamespace="http://example.com/root"
+           elementFormDefault="qualified">
+  <xs:import namespace="http://example.com/base" schemaLocation="base.xsd"/>
+  <xs:import namespace="http://example.com/impl" schemaLocation="impl.xsd"/>
+  <xs:complexType name="ZooType">
+    <xs:sequence>
+      <xs:element ref="base:animal" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="zoo" type="root:ZooType"/>
+</xs:schema>

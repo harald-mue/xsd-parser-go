@@ -1,0 +1,3 @@
+<tns:Config xmlns:tns="http://example.com/default-fixed" category="general">
+  <tns:Kind>standard</tns:Kind>
+</tns:Config>

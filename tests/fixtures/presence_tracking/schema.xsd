@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/presence"
+           targetNamespace="http://example.com/presence"
+           elementFormDefault="qualified">
+  <xs:complexType name="RequiredScalarType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Count" type="xs:int"/>
+      <xs:element name="Optional" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:element name="RequiredScalar" type="tns:RequiredScalarType"/>
+</xs:schema>

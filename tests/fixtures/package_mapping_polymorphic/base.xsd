@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:base="http://example.com/base"
+           targetNamespace="http://example.com/base"
+           elementFormDefault="qualified">
+  <xs:element name="animal" type="base:AnimalType" abstract="true"/>
+  <xs:complexType name="AnimalType">
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,4 @@
+<tns:FacetHolder xmlns:tns="http://example.com/facets">
+  <tns:Code>ABC</tns:Code>
+  <tns:Amount>123.45</tns:Amount>
+</tns:FacetHolder>

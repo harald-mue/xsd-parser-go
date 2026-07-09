@@ -1,0 +1,6 @@
+/generated/
+/tmp/
+/bin/
+/old/
+*.log
+.DS_Store

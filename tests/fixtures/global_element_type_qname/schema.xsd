@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="urn:legacy:announcement"
+           xmlns:ex="urn:legacy:exception"
+           targetNamespace="urn:legacy:announcement"
+           elementFormDefault="qualified">
+
+  <xs:import namespace="urn:legacy:exception" schemaLocation="exception.xsd"/>
+
+  <xs:element name="CommunicationFailure">
+    <xs:complexType>
+      <xs:sequence>
+        <!-- ap-scon-webrtc-stub: local element name differs from global element QName -->
+        <xs:element name="exception" type="ex:WebRTCException"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

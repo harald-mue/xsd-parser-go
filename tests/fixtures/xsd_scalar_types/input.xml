@@ -1,0 +1,10 @@
+<tns:ScalarHolder xmlns:tns="http://example.com/scalars">
+  <tns:Created>2024-01-02T03:04:05Z</tns:Created>
+  <tns:Birthday>2024-01-02</tns:Birthday>
+  <tns:Clock>03:04:05Z</tns:Clock>
+  <tns:Period>P1Y2M3DT4H5M6S</tns:Period>
+  <tns:Amount>1234.56</tns:Amount>
+  <tns:Payload>AQID</tns:Payload>
+  <tns:Digest>0a0b0c</tns:Digest>
+  <tns:Year>2024</tns:Year>
+</tns:ScalarHolder>

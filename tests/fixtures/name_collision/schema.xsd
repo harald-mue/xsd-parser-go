@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://root.example.com"
+           xmlns:a="http://a.example.com"
+           xmlns:b="http://b.example.com"
+           targetNamespace="http://root.example.com"
+           elementFormDefault="qualified">
+
+  <xs:import namespace="http://a.example.com" schemaLocation="a.xsd"/>
+  <xs:import namespace="http://b.example.com" schemaLocation="b.xsd"/>
+
+  <xs:complexType name="RootType">
+    <xs:sequence>
+      <xs:element name="homeAddress" type="a:AddressType"/>
+      <xs:element name="workAddress" type="b:AddressType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Root" type="tns:RootType"/>
+</xs:schema>

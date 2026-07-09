@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/default-fixed"
+           targetNamespace="http://example.com/default-fixed"
+           elementFormDefault="qualified">
+  <xs:complexType name="ConfigType">
+    <xs:sequence>
+      <xs:element name="Mode" type="xs:string" minOccurs="0" default="auto"/>
+      <xs:element name="Kind" type="xs:string" fixed="standard"/>
+    </xs:sequence>
+    <xs:attribute name="status" type="xs:string" default="new"/>
+    <xs:attribute name="category" type="xs:string" fixed="general"/>
+  </xs:complexType>
+  <xs:element name="Config" type="tns:ConfigType"/>
+</xs:schema>
