@@ -89,7 +89,7 @@ To add round-trip coverage for a fixture, drop a sample XML at
 | `facet_validation` | facet validation (length, pattern, etc.) |
 | `facet_digits_whitespace` | totalDigits, fractionDigits, whiteSpace |
 | `idref` | `xs:ID` / `xs:IDREF` / `xs:IDREFS` |
-| `imported_type_element` | top-level element typed with imported complex type (legacy DCM stub) |
+| `imported_type_element` | top-level element typed with imported complex type (legacy device-monitor stub) |
 | `global_element_type_qname` | local element name vs global element QName (legacy WebRTC stub) |
 | `imported_extension_base` | imported base type extension |
 | `list_union` | `xs:list` / `xs:union` |

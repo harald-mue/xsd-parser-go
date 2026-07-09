@@ -53,10 +53,10 @@ func targetNamespace(t *testing.T, path string) string {
 	}
 }
 
-func TestDCMStubGeneratesWithAutoNamespacePackages(t *testing.T) {
+func TestDeviceMonitorStubGeneratesWithAutoNamespacePackages(t *testing.T) {
 	root := stubPath(t, "ap-dcm-device-monitor-control-stub", "target")
 	dir := t.TempDir()
-	module := "tmp/legacydcm"
+	module := "tmp/legacydevicemonitor"
 	if err := pipeline.GenerateWithOptions([]string{
 		filepath.Join(root, "DeviceCommonTypes.xsd"),
 		filepath.Join(root, "DeviceControlMessages.xsd"),
@@ -169,6 +169,56 @@ func TestDiagnosticStubGeneratesWithAutoNamespacePackages(t *testing.T) {
 	if out, err := run(dir, "go", "build", "./..."); err != nil {
 		t.Fatalf("go build: %v\n%s", err, out)
 	}
+}
+
+func TestMultiProtocolStubGeneratesWithAutoNamespacePackages(t *testing.T) {
+	apiRoot := stubPath(t, "ap-dcm-interface-stub", "target", "api")
+	discoveryDir := t.TempDir()
+	upgradeDir := t.TempDir()
+	discoveryModule := "tmp/legacymultidiscovery"
+	upgradeModule := "tmp/legacymultiupgrade"
+
+	if err := pipeline.GenerateWithOptions([]string{
+		filepath.Join(apiRoot, "discovery", "v6", "DiscoveryDataMessages.xsd"),
+	}, pipeline.GenerateOptions{OutDir: discoveryDir, ModulePath: discoveryModule, AutoNamespacePackages: true}); err != nil {
+		t.Fatalf("discovery GenerateWithOptions returned error: %v", err)
+	}
+	if err := pipeline.GenerateWithOptions([]string{
+		filepath.Join(apiRoot, "softwareupgrade", "v1", "SoftwareUpgradeDefinition.xsd"),
+		filepath.Join(apiRoot, "softwareupgrade", "v1", "SoftwareUpgradeCommand.xsd"),
+		filepath.Join(apiRoot, "softwareupgrade", "v1", "SoftwareUpgradeServiceCommand.xsd"),
+		filepath.Join(apiRoot, "softwareupgrade", "v1", "SoftwareUpgradeNotification.xsd"),
+	}, pipeline.GenerateOptions{OutDir: upgradeDir, ModulePath: upgradeModule, AutoNamespacePackages: true}); err != nil {
+		t.Fatalf("upgrade GenerateWithOptions returned error: %v", err)
+	}
+
+	assertGeneratedContains(t, discoveryDir, map[string][]string{
+		filepath.Join("data", "models.go"): {
+			"TimeZoneEnumEtcGMT12",
+			`TimeZoneEnum = "Etc/GMT+12"`,
+		},
+	})
+	assertGeneratedContains(t, upgradeDir, map[string][]string{
+		filepath.Join("data", "models.go"): {
+			"type Checksum interface",
+			"type TargetSystems interface",
+		},
+		filepath.Join("definition", "models.go"): {
+			"type Artifact =",
+			"v := data.",
+		},
+		filepath.Join("command", "models.go"): {
+			"Artifact          data.",
+		},
+		filepath.Join("notification", "models.go"): {
+			"type DeploymentIdentifier interface",
+			"DeploymentIdentifierRegistry",
+			"xsi:type",
+			"IsDeploymentIdentifier()",
+		},
+	})
+	assertBuilds(t, discoveryDir, discoveryModule)
+	assertBuilds(t, upgradeDir, upgradeModule)
 }
 
 func TestGenericIntercomStubGeneratesWithAutoNamespacePackages(t *testing.T) {
