@@ -194,7 +194,7 @@ func renderChoice(buf *bytes.Buffer, file generator.File, typ generator.TypeDecl
 }
 
 func renderCustomXML(buf *bytes.Buffer, file generator.File, typ generator.TypeDecl) {
-	if typ.CustomXML == nil || len(typ.CustomXML.Fields) == 0 {
+	if typ.CustomXML == nil || (len(typ.CustomXML.Fields) == 0 && len(typ.CustomXML.RegularFields) == 0) {
 		return
 	}
 	c := typ.CustomXML
@@ -229,6 +229,34 @@ func renderCustomXML(buf *bytes.Buffer, file generator.File, typ generator.TypeD
 		fmt.Fprintln(buf, "\t\t\t\t}")
 		fmt.Fprintln(buf, "\t\t\t}")
 	}
+	// Regular (non-polymorphic) element fields
+	if len(c.RegularFields) > 0 {
+		fmt.Fprintln(buf, "\t\t\tif !handled {")
+		fmt.Fprintln(buf, "\t\t\t\tswitch {")
+		for _, rf := range c.RegularFields {
+			fmt.Fprintf(buf, "\t\t\t\tcase e.Name.Space == %q && e.Name.Local == %q:\n", rf.XMLNamespace, rf.XMLName)
+			if rf.Repeated {
+				fmt.Fprintf(buf, "\t\t\t\t\tvar v %s\n", rf.BaseType)
+				fmt.Fprintln(buf, "\t\t\t\t\tif err := d.DecodeElement(&v, &e); err != nil {")
+				fmt.Fprintln(buf, "\t\t\t\t\t\treturn err")
+				fmt.Fprintln(buf, "\t\t\t\t\t}")
+				fmt.Fprintf(buf, "\t\t\t\t\tt.%s = append(t.%s, v)\n", rf.FieldName, rf.FieldName)
+			} else if rf.Optional {
+				fmt.Fprintf(buf, "\t\t\t\t\tvar v %s\n", rf.BaseType)
+				fmt.Fprintln(buf, "\t\t\t\t\tif err := d.DecodeElement(&v, &e); err != nil {")
+				fmt.Fprintln(buf, "\t\t\t\t\t\treturn err")
+				fmt.Fprintln(buf, "\t\t\t\t\t}")
+				fmt.Fprintf(buf, "\t\t\t\t\tt.%s = &v\n", rf.FieldName)
+			} else {
+				fmt.Fprintln(buf, "\t\t\t\t\tif err := d.DecodeElement(&t."+rf.FieldName+", &e); err != nil {")
+				fmt.Fprintln(buf, "\t\t\t\t\t\treturn err")
+				fmt.Fprintln(buf, "\t\t\t\t\t}")
+			}
+			fmt.Fprintln(buf, "\t\t\t\t\thandled = true")
+		}
+		fmt.Fprintln(buf, "\t\t\t\t}")
+		fmt.Fprintln(buf, "\t\t\t}")
+	}
 	fmt.Fprintln(buf, "\t\t\tif !handled {")
 	fmt.Fprintln(buf, "\t\t\t\tif err := d.Skip(); err != nil {")
 	fmt.Fprintln(buf, "\t\t\t\t\treturn err")
@@ -250,6 +278,33 @@ func renderCustomXML(buf *bytes.Buffer, file generator.File, typ generator.TypeD
 	fmt.Fprintln(buf, "\tif err := e.EncodeToken(start); err != nil {")
 	fmt.Fprintln(buf, "\t\treturn err")
 	fmt.Fprintln(buf, "\t}")
+	// Regular fields first (in definition order)
+	for _, rf := range c.RegularFields {
+		if rf.Repeated {
+			fmt.Fprintf(buf, "\tfor _, v := range t.%s {\n", rf.FieldName)
+			renderDeclarePrefixedStart(buf, file, "child", rf.XMLNamespace, rf.XMLName, "\t\t")
+			fmt.Fprintln(buf, "\t\tif err := e.EncodeElement(v, child); err != nil {")
+			fmt.Fprintln(buf, "\t\t\treturn err")
+			fmt.Fprintln(buf, "\t\t}")
+			fmt.Fprintln(buf, "\t}")
+		} else if rf.Optional {
+			fmt.Fprintf(buf, "\tif t.%s != nil {\n", rf.FieldName)
+			renderDeclarePrefixedStart(buf, file, "child", rf.XMLNamespace, rf.XMLName, "\t\t")
+			fmt.Fprintf(buf, "\t\tif err := e.EncodeElement(t.%s, child); err != nil {\n", rf.FieldName)
+			fmt.Fprintln(buf, "\t\t\treturn err")
+			fmt.Fprintln(buf, "\t\t}")
+			fmt.Fprintln(buf, "\t}")
+		} else {
+			// Wrap in block to avoid redeclaration of 'child' at function scope
+			fmt.Fprintln(buf, "\t{")
+			renderDeclarePrefixedStart(buf, file, "child", rf.XMLNamespace, rf.XMLName, "\t\t")
+			fmt.Fprintf(buf, "\t\tif err := e.EncodeElement(t.%s, child); err != nil {\n", rf.FieldName)
+			fmt.Fprintln(buf, "\t\t\treturn err")
+			fmt.Fprintln(buf, "\t\t}")
+			fmt.Fprintln(buf, "\t}")
+		}
+	}
+	// Polymorphic fields
 	for _, field := range c.Fields {
 		if field.Repeated {
 			fmt.Fprintf(buf, "\tfor _, v := range t.%s {\n", field.FieldName)

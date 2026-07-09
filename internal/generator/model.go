@@ -162,9 +162,10 @@ type ChoiceVariant struct {
 
 // CustomXMLDecl describes generated MarshalXML/UnmarshalXML for a container.
 type CustomXMLDecl struct {
-	ElementNS    string
-	ElementLocal string
-	Fields       []CustomXMLFieldDecl
+	ElementNS     string
+	ElementLocal  string
+	Fields        []CustomXMLFieldDecl   // polymorphic fields dispatched via registry
+	RegularFields []CustomXMLRegularField // non-polymorphic element fields
 }
 
 // CustomXMLFieldDecl is one polymorphic field handled by custom XML methods.
@@ -172,6 +173,16 @@ type CustomXMLFieldDecl struct {
 	FieldName   string
 	RegistryVar string
 	Repeated    bool
+}
+
+// CustomXMLRegularField is one non-polymorphic element field handled by custom XML methods.
+type CustomXMLRegularField struct {
+	FieldName    string // Go struct field name
+	XMLName      string // XML element local name
+	XMLNamespace string // XML element namespace URI
+	BaseType     string // Go type without leading * or []
+	Optional     bool   // field is *T
+	Repeated     bool   // field is []T
 }
 
 // ListDecl is one generated xs:list simple type.

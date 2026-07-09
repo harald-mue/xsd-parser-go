@@ -1,6 +1,8 @@
 package generator
 
 import (
+	"strings"
+
 	"github.com/harald-mue/xsd-parser-go/internal/interpreter"
 	"github.com/harald-mue/xsd-parser-go/internal/schema"
 )
@@ -22,18 +24,41 @@ func applyCustomXML(decl *TypeDecl, custom *interpreter.CustomXML) {
 		ElementLocal: custom.ElementLocal,
 	}
 	for _, field := range decl.Fields {
-		if !field.Polymorphic {
+		if field.Polymorphic {
+			customDecl.Fields = append(customDecl.Fields, CustomXMLFieldDecl{
+				FieldName:   field.Name,
+				RegistryVar: field.RegistryVar,
+				Repeated:    field.Repeated,
+			})
 			continue
 		}
-		customDecl.Fields = append(customDecl.Fields, CustomXMLFieldDecl{
-			FieldName:   field.Name,
-			RegistryVar: field.RegistryVar,
-			Repeated:    field.Repeated,
+		// Regular element fields (skip attributes, any-element, chardata, empty XMLName)
+		if field.Attribute || field.AnyAttribute || field.AnyElement || field.Chardata || field.XMLName == "" {
+			continue
+		}
+		customDecl.RegularFields = append(customDecl.RegularFields, CustomXMLRegularField{
+			FieldName:    field.Name,
+			XMLName:      field.XMLName,
+			XMLNamespace: field.XMLNamespace,
+			BaseType:     regularBaseType(field.Type),
+			Optional:     field.Optional,
+			Repeated:     field.Repeated,
 		})
 	}
-	if len(customDecl.Fields) > 0 {
+	if len(customDecl.Fields) > 0 || len(customDecl.RegularFields) > 0 {
 		decl.CustomXML = customDecl
 	}
+}
+
+// regularBaseType strips leading * or [] from a Go type string.
+func regularBaseType(typ string) string {
+	if strings.HasPrefix(typ, "[]") {
+		return typ[2:]
+	}
+	if strings.HasPrefix(typ, "*") {
+		return typ[1:]
+	}
+	return typ
 }
 
 // applyInterfaces emits polymorphic interfaces and registries for a file.
