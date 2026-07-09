@@ -285,6 +285,6 @@ type DeploymentIdentifierRegistryEntry struct {
 }
 
 var DeploymentIdentifierRegistry = map[QName]DeploymentIdentifierRegistryEntry{
-	QName{Namespace: "http://example.com/abstract-empty-base", Local: "ArtifactIdentifier"}:     {New: func() DeploymentIdentifier { return &ArtifactIdentifier{} }, Element: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdentifier"}, XSIType: QName{Namespace: "http://example.com/abstract-empty-base", Local: "ArtifactIdentifier"}, UseXSIType: true},
-	QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdIdentifier"}: {New: func() DeploymentIdentifier { return &DeploymentIdIdentifier{} }, Element: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdentifier"}, XSIType: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdIdentifier"}, UseXSIType: true},
+	{Namespace: "http://example.com/abstract-empty-base", Local: "ArtifactIdentifier"}:     {New: func() DeploymentIdentifier { return &ArtifactIdentifier{} }, Element: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdentifier"}, XSIType: QName{Namespace: "http://example.com/abstract-empty-base", Local: "ArtifactIdentifier"}, UseXSIType: true},
+	{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdIdentifier"}: {New: func() DeploymentIdentifier { return &DeploymentIdIdentifier{} }, Element: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdentifier"}, XSIType: QName{Namespace: "http://example.com/abstract-empty-base", Local: "DeploymentIdIdentifier"}, UseXSIType: true},
 }

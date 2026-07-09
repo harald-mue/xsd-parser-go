@@ -289,6 +289,6 @@ type AnimalRegistryEntry struct {
 }
 
 var AnimalRegistry = map[QName]AnimalRegistryEntry{
-	QName{Namespace: "http://example.com/impl", Local: "dog"}:     {New: func() Animal { return &DogType{} }, Element: QName{Namespace: "http://example.com/impl", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-	QName{Namespace: "http://example.com/impl", Local: "DogType"}: {New: func() Animal { return &DogType{} }, Element: QName{Namespace: "http://example.com/impl", Local: "dog"}, XSIType: QName{Namespace: "http://example.com/impl", Local: "DogType"}, UseXSIType: true},
+	{Namespace: "http://example.com/impl", Local: "dog"}:     {New: func() Animal { return &DogType{} }, Element: QName{Namespace: "http://example.com/impl", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com/impl", Local: "DogType"}: {New: func() Animal { return &DogType{} }, Element: QName{Namespace: "http://example.com/impl", Local: "dog"}, XSIType: QName{Namespace: "http://example.com/impl", Local: "DogType"}, UseXSIType: true},
 }

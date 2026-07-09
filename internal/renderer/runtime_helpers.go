@@ -622,8 +622,8 @@ func renderRegistry(buf *bytes.Buffer, file generator.File, reg generator.Regist
 
 	fmt.Fprintf(buf, "var %s = map[%s]%s{\n", reg.VarName, qname, entryType)
 	for _, e := range reg.Entries {
-		fmt.Fprintf(buf, "\t%s{Namespace: %q, Local: %q}: {New: func() %s { return &%s{} }, Element: %s{Namespace: %q, Local: %q}, XSIType: %s{Namespace: %q, Local: %q}, UseXSIType: %t},\n",
-			qname, e.DispatchNS, e.DispatchLocal, reg.InterfaceName, e.ConcreteType,
+		fmt.Fprintf(buf, "\t{Namespace: %q, Local: %q}: {New: func() %s { return &%s{} }, Element: %s{Namespace: %q, Local: %q}, XSIType: %s{Namespace: %q, Local: %q}, UseXSIType: %t},\n",
+			e.DispatchNS, e.DispatchLocal, reg.InterfaceName, e.ConcreteType,
 			qname, e.ElementNS, e.ElementLocal, qname, e.XSITypeNS, e.XSITypeLocal, e.UseXSIType)
 	}
 	fmt.Fprintln(buf, "}")

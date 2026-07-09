@@ -335,8 +335,8 @@ type PayloadRegistryEntry struct {
 }
 
 var PayloadRegistry = map[QName]PayloadRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "binaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-	QName{Namespace: "http://example.com", Local: "textPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-	QName{Namespace: "http://example.com", Local: "BinaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "BinaryPayload"}, UseXSIType: true},
-	QName{Namespace: "http://example.com", Local: "TextPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "TextPayload"}, UseXSIType: true},
+	{Namespace: "http://example.com", Local: "binaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "textPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "BinaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "BinaryPayload"}, UseXSIType: true},
+	{Namespace: "http://example.com", Local: "TextPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "TextPayload"}, UseXSIType: true},
 }

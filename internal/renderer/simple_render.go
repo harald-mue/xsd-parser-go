@@ -197,6 +197,9 @@ func renderValidate(buf *bytes.Buffer, typ generator.TypeDecl) {
 			fmt.Fprintf(buf, "\t\treturn fmt.Errorf(\"type %s length must be %s\")\n", typ.Name, facet.Value)
 			fmt.Fprintln(buf, "\t}")
 		case "minLength":
+			if facet.Value == "0" {
+				break // len() never returns negative; skip trivially-true check
+			}
 			fmt.Fprintf(buf, "\tif len(string(v)) < %s {\n", facet.Value)
 			fmt.Fprintf(buf, "\t\treturn fmt.Errorf(\"type %s length must be >= %s\")\n", typ.Name, facet.Value)
 			fmt.Fprintln(buf, "\t}")

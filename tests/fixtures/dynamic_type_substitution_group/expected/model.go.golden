@@ -417,8 +417,8 @@ type AnimalRegistryEntry struct {
 }
 
 var AnimalRegistry = map[QName]AnimalRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "dog"}:      {New: func() Animal { return &Dog{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-	QName{Namespace: "http://example.com", Local: "cat"}:      {New: func() Animal { return &Cat{} }, Element: QName{Namespace: "http://example.com", Local: "cat"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-	QName{Namespace: "http://example.com", Local: "beagle"}:   {New: func() Animal { return &Beagle{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "http://example.com", Local: "beagle"}, UseXSIType: true},
-	QName{Namespace: "http://example.com", Local: "labrador"}: {New: func() Animal { return &Labrador{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "http://example.com", Local: "labrador"}, UseXSIType: true},
+	{Namespace: "http://example.com", Local: "dog"}:      {New: func() Animal { return &Dog{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "cat"}:      {New: func() Animal { return &Cat{} }, Element: QName{Namespace: "http://example.com", Local: "cat"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "beagle"}:   {New: func() Animal { return &Beagle{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "http://example.com", Local: "beagle"}, UseXSIType: true},
+	{Namespace: "http://example.com", Local: "labrador"}: {New: func() Animal { return &Labrador{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "http://example.com", Local: "labrador"}, UseXSIType: true},
 }

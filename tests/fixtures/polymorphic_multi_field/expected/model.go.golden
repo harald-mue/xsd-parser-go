@@ -404,7 +404,7 @@ type AnimalRegistryEntry struct {
 }
 
 var AnimalRegistry = map[QName]AnimalRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "dog"}: {New: func() Animal { return &Dog{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "dog"}: {New: func() Animal { return &Dog{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
 }
 
 type VehicleRegistryEntry struct {
@@ -415,5 +415,5 @@ type VehicleRegistryEntry struct {
 }
 
 var VehicleRegistry = map[QName]VehicleRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "car"}: {New: func() Vehicle { return &Car{} }, Element: QName{Namespace: "http://example.com", Local: "car"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	{Namespace: "http://example.com", Local: "car"}: {New: func() Vehicle { return &Car{} }, Element: QName{Namespace: "http://example.com", Local: "car"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
 }
