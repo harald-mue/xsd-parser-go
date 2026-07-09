@@ -123,36 +123,41 @@ func prefixedAttr(namespace, local, value string) []xml.Attr {
 	return []xml.Attr{{Name: xml.Name{Space: namespace, Local: local}, Value: value}}
 }
 
-type Container ContainerType
+type Artifact ArtifactType
 
-func (t Container) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
-	start := prefixedStart("http://example.com", "container")
-	v := ContainerType(t)
+func (t Artifact) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
+	start := prefixedStart("http://example.com", "Artifact")
+	v := ArtifactType(t)
 	return e.EncodeElement(&v, start)
 }
 
-type ContainerType struct {
-	Animal  Animal  `xml:"-"`
-	Vehicle Vehicle `xml:"-"`
+type ArtifactType struct {
+	Name     string    `xml:"http://example.com Name"`
+	Version  string    `xml:"http://example.com Version"`
+	Optional *string   `xml:"http://example.com Optional,omitempty"`
+	Payload  []Payload `xml:"-"`
 }
 
-func (v ContainerType) Validate() error {
-	if v.Animal == nil {
-		return fmt.Errorf("field Animal is required")
-	}
-	if err := validateField("Animal", v.Animal); err != nil {
+func (v ArtifactType) Validate() error {
+	if err := validateField("Name", v.Name); err != nil {
 		return err
 	}
-	if v.Vehicle == nil {
-		return fmt.Errorf("field Vehicle is required")
+	if err := validateField("Version", v.Version); err != nil {
+		return err
 	}
-	if err := validateField("Vehicle", v.Vehicle); err != nil {
+	if err := validateField("Optional", v.Optional); err != nil {
+		return err
+	}
+	if len(v.Payload) < 1 {
+		return fmt.Errorf("field Payload requires at least 1 item(s)")
+	}
+	if err := validateField("Payload", v.Payload); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *ContainerType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (t *ArtifactType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for {
 		tok, err := d.Token()
 		if err != nil {
@@ -166,26 +171,33 @@ func (t *ContainerType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 				if q, ok := XSITypeQName(e); ok {
 					dispatch = q
 				}
-				if entry, ok := AnimalRegistry[dispatch]; ok {
+				if entry, ok := PayloadRegistry[dispatch]; ok {
 					v := entry.New()
 					if err := d.DecodeElement(v, &e); err != nil {
 						return err
 					}
-					t.Animal = v
+					t.Payload = append(t.Payload, v)
 					handled = true
 				}
 			}
 			if !handled {
-				dispatch := QName{Namespace: e.Name.Space, Local: e.Name.Local}
-				if q, ok := XSITypeQName(e); ok {
-					dispatch = q
-				}
-				if entry, ok := VehicleRegistry[dispatch]; ok {
-					v := entry.New()
-					if err := d.DecodeElement(v, &e); err != nil {
+				switch {
+				case e.Name.Space == "http://example.com" && e.Name.Local == "Name":
+					if err := d.DecodeElement(&t.Name, &e); err != nil {
 						return err
 					}
-					t.Vehicle = v
+					handled = true
+				case e.Name.Space == "http://example.com" && e.Name.Local == "Version":
+					if err := d.DecodeElement(&t.Version, &e); err != nil {
+						return err
+					}
+					handled = true
+				case e.Name.Space == "http://example.com" && e.Name.Local == "Optional":
+					var v string
+					if err := d.DecodeElement(&v, &e); err != nil {
+						return err
+					}
+					t.Optional = &v
 					handled = true
 				}
 			}
@@ -200,43 +212,32 @@ func (t *ContainerType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 	}
 }
 
-func (t ContainerType) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
-	start := prefixedStart("http://example.com", "container")
+func (t ArtifactType) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
+	start := prefixedStart("http://example.com", "ArtifactType")
 	if err := e.EncodeToken(start); err != nil {
 		return err
 	}
-	if t.Animal != nil {
-		v := t.Animal
-		matched := false
-		for _, entry := range AnimalRegistry {
-			if reflect.TypeOf(v) != reflect.TypeOf(entry.New()) {
-				continue
-			}
-			child := prefixedStart(entry.Element.Namespace, entry.Element.Local)
-			if entry.UseXSIType {
-				child.Attr = append(child.Attr, xml.Attr{Name: xml.Name{Local: "xmlns:xsi"}, Value: xsiNamespace})
-				xsiTypeValue := entry.XSIType.Local
-				if entry.XSIType.Namespace != "" {
-					if xsiPrefix := namespacePrefixes[entry.XSIType.Namespace]; xsiPrefix != "" {
-						xsiTypeValue = xsiPrefix + ":" + entry.XSIType.Local
-					}
-				}
-				child.Attr = append(child.Attr, xml.Attr{Name: xml.Name{Local: "xsi:type"}, Value: xsiTypeValue})
-			}
-			if err := e.EncodeElement(v, child); err != nil {
-				return err
-			}
-			matched = true
-			break
-		}
-		if !matched {
-			return fmt.Errorf("unknown polymorphic value %T", v)
+	{
+		child := prefixedStart("http://example.com", "Name")
+		if err := e.EncodeElement(t.Name, child); err != nil {
+			return err
 		}
 	}
-	if t.Vehicle != nil {
-		v := t.Vehicle
+	{
+		child := prefixedStart("http://example.com", "Version")
+		if err := e.EncodeElement(t.Version, child); err != nil {
+			return err
+		}
+	}
+	if t.Optional != nil {
+		child := prefixedStart("http://example.com", "Optional")
+		if err := e.EncodeElement(t.Optional, child); err != nil {
+			return err
+		}
+	}
+	for _, v := range t.Payload {
 		matched := false
-		for _, entry := range VehicleRegistry {
+		for _, entry := range PayloadRegistry {
 			if reflect.TypeOf(v) != reflect.TypeOf(entry.New()) {
 				continue
 			}
@@ -264,156 +265,78 @@ func (t ContainerType) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
 	return e.EncodeToken(start.End())
 }
 
-type AnimalType struct {
-	Id int `xml:"id,attr"`
+type PayloadBase struct{}
+
+type TextPayload struct {
+	XMLName xml.Name `xml:"http://example.com textPayload"`
+	Content string   `xml:"http://example.com Content"`
 }
 
-func (v AnimalType) Validate() error {
-	if err := validateField("Id", v.Id); err != nil {
+func (v TextPayload) Validate() error {
+	if err := validateField("Content", v.Content); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *AnimalType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (t *TextPayload) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var v struct {
-		Id *int `xml:"id,attr"`
+		Content *string `xml:"http://example.com Content"`
 	}
 	if err := d.DecodeElement(&v, &start); err != nil {
 		return err
 	}
-	if v.Id == nil {
-		return fmt.Errorf("field Id is required")
+	if v.Content == nil {
+		return fmt.Errorf("field Content is required")
 	}
-	t.Id = *v.Id
+	t.Content = *v.Content
 	return nil
 }
 
-type Dog struct {
-	XMLName xml.Name `xml:"http://example.com dog"`
-	Id      int      `xml:"id,attr"`
-	Name    string   `xml:"name,attr"`
+func (*TextPayload) IsPayload() {}
+
+type BinaryPayload struct {
+	XMLName xml.Name `xml:"http://example.com binaryPayload"`
+	Size    int      `xml:"http://example.com Size"`
 }
 
-func (v Dog) Validate() error {
-	if err := validateField("Id", v.Id); err != nil {
-		return err
-	}
-	if err := validateField("Name", v.Name); err != nil {
+func (v BinaryPayload) Validate() error {
+	if err := validateField("Size", v.Size); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *Dog) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (t *BinaryPayload) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var v struct {
-		Id   *int    `xml:"id,attr"`
-		Name *string `xml:"name,attr"`
+		Size *int `xml:"http://example.com Size"`
 	}
 	if err := d.DecodeElement(&v, &start); err != nil {
 		return err
 	}
-	if v.Id == nil {
-		return fmt.Errorf("field Id is required")
+	if v.Size == nil {
+		return fmt.Errorf("field Size is required")
 	}
-	t.Id = *v.Id
-	if v.Name == nil {
-		return fmt.Errorf("field Name is required")
-	}
-	t.Name = *v.Name
+	t.Size = *v.Size
 	return nil
 }
 
-func (*Dog) IsAnimal() {}
+func (*BinaryPayload) IsPayload() {}
 
-type VehicleType struct {
-	Vin string `xml:"vin,attr"`
+type Payload interface {
+	IsPayload()
 }
 
-func (v VehicleType) Validate() error {
-	if err := validateField("Vin", v.Vin); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (t *VehicleType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var v struct {
-		Vin *string `xml:"vin,attr"`
-	}
-	if err := d.DecodeElement(&v, &start); err != nil {
-		return err
-	}
-	if v.Vin == nil {
-		return fmt.Errorf("field Vin is required")
-	}
-	t.Vin = *v.Vin
-	return nil
-}
-
-type Car struct {
-	XMLName xml.Name `xml:"http://example.com car"`
-	Vin     string   `xml:"vin,attr"`
-	Brand   string   `xml:"brand,attr"`
-}
-
-func (v Car) Validate() error {
-	if err := validateField("Vin", v.Vin); err != nil {
-		return err
-	}
-	if err := validateField("Brand", v.Brand); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (t *Car) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var v struct {
-		Vin   *string `xml:"vin,attr"`
-		Brand *string `xml:"brand,attr"`
-	}
-	if err := d.DecodeElement(&v, &start); err != nil {
-		return err
-	}
-	if v.Vin == nil {
-		return fmt.Errorf("field Vin is required")
-	}
-	t.Vin = *v.Vin
-	if v.Brand == nil {
-		return fmt.Errorf("field Brand is required")
-	}
-	t.Brand = *v.Brand
-	return nil
-}
-
-func (*Car) IsVehicle() {}
-
-type Animal interface {
-	IsAnimal()
-}
-
-type Vehicle interface {
-	IsVehicle()
-}
-
-type AnimalRegistryEntry struct {
-	New        func() Animal
+type PayloadRegistryEntry struct {
+	New        func() Payload
 	Element    QName
 	XSIType    QName
 	UseXSIType bool
 }
 
-var AnimalRegistry = map[QName]AnimalRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "dog"}: {New: func() Animal { return &Dog{} }, Element: QName{Namespace: "http://example.com", Local: "dog"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
-}
-
-type VehicleRegistryEntry struct {
-	New        func() Vehicle
-	Element    QName
-	XSIType    QName
-	UseXSIType bool
-}
-
-var VehicleRegistry = map[QName]VehicleRegistryEntry{
-	QName{Namespace: "http://example.com", Local: "car"}: {New: func() Vehicle { return &Car{} }, Element: QName{Namespace: "http://example.com", Local: "car"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+var PayloadRegistry = map[QName]PayloadRegistryEntry{
+	QName{Namespace: "http://example.com", Local: "binaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	QName{Namespace: "http://example.com", Local: "textPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "", Local: ""}, UseXSIType: false},
+	QName{Namespace: "http://example.com", Local: "BinaryPayload"}: {New: func() Payload { return &BinaryPayload{} }, Element: QName{Namespace: "http://example.com", Local: "binaryPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "BinaryPayload"}, UseXSIType: true},
+	QName{Namespace: "http://example.com", Local: "TextPayload"}:   {New: func() Payload { return &TextPayload{} }, Element: QName{Namespace: "http://example.com", Local: "textPayload"}, XSIType: QName{Namespace: "http://example.com", Local: "TextPayload"}, UseXSIType: true},
 }

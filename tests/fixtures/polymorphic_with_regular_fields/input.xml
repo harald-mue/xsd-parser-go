@@ -1,0 +1,11 @@
+<Artifact xmlns="http://example.com">
+  <Name>my-artifact</Name>
+  <Version>1.2.3</Version>
+  <Optional>some-value</Optional>
+  <textPayload xmlns="http://example.com">
+    <Content>hello world</Content>
+  </textPayload>
+  <binaryPayload xmlns="http://example.com">
+    <Size>42</Size>
+  </binaryPayload>
+</Artifact>

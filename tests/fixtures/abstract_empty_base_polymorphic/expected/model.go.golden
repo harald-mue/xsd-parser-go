@@ -40,7 +40,11 @@ func XSITypeQName(start xml.StartElement) (QName, bool) {
 			return QName{Namespace: attr.Value, Local: local}, true
 		}
 	}
-	return QName{Local: local}, true
+	// Fallback: the xsi:type prefix was likely declared on an ancestor element.
+	// Go's decoder resolves element names via ancestor xmlns declarations but does
+	// not include them in Attr of descendant elements. Use the element's own
+	// resolved namespace as the best available fallback.
+	return QName{Namespace: start.Name.Space, Local: local}, true
 }
 
 func cutQName(raw string) (string, string, bool) {
@@ -190,7 +194,13 @@ func (t StatusTypeType) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
 			child := prefixedStart(entry.Element.Namespace, entry.Element.Local)
 			if entry.UseXSIType {
 				child.Attr = append(child.Attr, xml.Attr{Name: xml.Name{Local: "xmlns:xsi"}, Value: xsiNamespace})
-				child.Attr = append(child.Attr, xml.Attr{Name: xml.Name{Local: "xsi:type"}, Value: entry.XSIType.Local})
+				xsiTypeValue := entry.XSIType.Local
+				if entry.XSIType.Namespace != "" {
+					if xsiPrefix := namespacePrefixes[entry.XSIType.Namespace]; xsiPrefix != "" {
+						xsiTypeValue = xsiPrefix + ":" + entry.XSIType.Local
+					}
+				}
+				child.Attr = append(child.Attr, xml.Attr{Name: xml.Name{Local: "xsi:type"}, Value: xsiTypeValue})
 			}
 			if err := e.EncodeElement(v, child); err != nil {
 				return err

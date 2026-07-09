@@ -359,7 +359,11 @@ func XSITypeQName(start xml.StartElement) (QName, bool) {
 			return QName{Namespace: attr.Value, Local: local}, true
 		}
 	}
-	return QName{Local: local}, true
+	// Fallback: the xsi:type prefix was likely declared on an ancestor element.
+	// Go's decoder resolves element names via ancestor xmlns declarations but does
+	// not include them in Attr of descendant elements. Use the element's own
+	// resolved namespace as the best available fallback.
+	return QName{Namespace: start.Name.Space, Local: local}, true
 }
 
 func cutQName(raw string) (string, string, bool) {

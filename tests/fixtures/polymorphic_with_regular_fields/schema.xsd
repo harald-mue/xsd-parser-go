@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fixture: polymorphic_with_regular_fields
+
+  A complexType that contains both regular (non-polymorphic) child elements
+  AND polymorphic child elements via a substitution group.
+
+  This tests that the generated UnmarshalXML/MarshalXML for the container
+  correctly handles both kinds of fields in a single token loop, i.e. that
+  regular fields are NOT silently skipped (d.Skip) when a custom UnmarshalXML
+  is required for the polymorphic dispatch.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://example.com"
+        targetNamespace="http://example.com"
+        elementFormDefault="qualified">
+
+  <!-- Container with regular fields + polymorphic children -->
+  <complexType name="ArtifactType">
+    <sequence>
+      <element name="Name"     type="xs:string"/>
+      <element name="Version"  type="xs:string"/>
+      <element name="Optional" type="xs:string" minOccurs="0"/>
+      <element ref="tns:payload" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <!-- Polymorphic base element -->
+  <element name="payload"     type="tns:PayloadBase" abstract="true"/>
+  <element name="textPayload" type="tns:TextPayload"  substitutionGroup="tns:payload"/>
+  <element name="binaryPayload" type="tns:BinaryPayload" substitutionGroup="tns:payload"/>
+
+  <complexType name="PayloadBase" abstract="true"/>
+
+  <complexType name="TextPayload">
+    <complexContent>
+      <extension base="tns:PayloadBase">
+        <sequence>
+          <element name="Content" type="xs:string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="BinaryPayload">
+    <complexContent>
+      <extension base="tns:PayloadBase">
+        <sequence>
+          <element name="Size" type="xs:int"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element name="Artifact" type="tns:ArtifactType"/>
+
+</schema>
